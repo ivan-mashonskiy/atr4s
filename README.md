@@ -153,6 +153,12 @@ class ATRExample {
 }
 ```
 
+## Additional components for using of Mystem preprocessing and morphological features for Russian language
+
+Mystem download link: https://yandex.ru/dev/mystem/
+
+Morphemmer (for MorphemesTermVariantRecognizerConfig) download link: https://github.com/alesapin/XMorphy/tree/master/programs/morphemmer 
+
 ## License
 
 Apache License Version 2.0.
