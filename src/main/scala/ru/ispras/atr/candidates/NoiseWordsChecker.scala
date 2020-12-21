@@ -31,7 +31,7 @@ class NoiseWordsChecker(minWordLength: Int,
   }
 
   def isGoodLemma(lemma: String) = {
-    lemma.length >= minWordLength && acceptableCharsRegex.unapplySeq(lemma).isEmpty
+    lemma.length >= minWordLength //&& lemma.forall(c => c.isLetterOrDigit || c == '-')//acceptableCharsRegex.unapplySeq(lemma).isEmpty
   }
 
   def isGoodPoS(posTag: String) = {

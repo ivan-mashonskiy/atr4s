@@ -16,7 +16,8 @@ import scala.collection.JavaConversions.asScalaBuffer
   */
 class TermCandidatesCollector(nGramSizes: Seq[Int],
                               minTermFreq: Int,
-                              termOccurrencesCollector: TermOccurrencesCollector) {
+                              termOccurrencesCollector: TermOccurrencesCollector,
+                              termVariantRecognizer: TermVariantRecognizer) {
   val log = LogManager.getLogger(getClass)
 
   def collect(dataset: DSDataset) : Seq[TermCandidate] = {
@@ -31,8 +32,7 @@ class TermCandidatesCollector(nGramSizes: Seq[Int],
     val allTermOccurrences = dataset.docsMap.values.par.flatMap(doc => termOccurrencesCollector.collect(doc, nGramSize))
     log.info(s"$nGramSize-grams occurrences: ${allTermOccurrences.size}")
     //create term candidate by grouping term occurrences by canonical representation
-    val allTermCandidates = allTermOccurrences.groupBy(TermOccurrence.canonicalRepresentation).toSeq
-      .map(tc => TermCandidate(tc._2.toSeq.seq))
+    val allTermCandidates = termVariantRecognizer.recognize(allTermOccurrences.toSeq.seq)
     log.info(s"$nGramSize-grams candidates: ${allTermCandidates.size}")
     val frequentTermCandidates = allTermCandidates.filter(_.occurrences.size >= minTermFreq)
     log.info(s"$nGramSize-grams (freq >=$minTermFreq): ${frequentTermCandidates.size}")
@@ -69,7 +69,7 @@ class TermOccurrencesCollector(noiseWordsChecker: NoiseWordsChecker,
 /**
   * Configuration/builder for TermOccurrencesCollector
   */
-case class TermOccurrencesCollectorConfig(posPatternCheckerConfig: POSPatternCheckerConfig = RegexPOSPatternCheckerConfig(),
+case class TermOccurrencesCollectorConfig(posPatternCheckerConfig: POSPatternCheckerConfig = MystemPOSPatternCheckerConfig(),//RegexPOSPatternCheckerConfig(),
                                           stopWordsCheckerConfig: StopWordsCheckerConfig = StopWordsCheckerConfig(),
                                           noiseWordsCheckerConfig: NoiseWordsCheckerConfig = NoiseWordsCheckerConfig()) {
   def build(): TermOccurrencesCollector = {
@@ -95,13 +95,15 @@ trait TermCandidatesCollectorConfig {
 
 case class TCCConfig(nGramSizes: Seq[Int] = 1 to 4,
                      minTermFreq: Int = 2,
-                     termOccurrencesCollectorConfig: TermOccurrencesCollectorConfig = TermOccurrencesCollectorConfig())
+                     termOccurrencesCollectorConfig: TermOccurrencesCollectorConfig = TermOccurrencesCollectorConfig(),
+                     termVariantRecognizerConfig: TermVariantRecognizerConfig = BagOfWordsTermVariantRecognizerConfig())
     extends TermCandidatesCollectorConfig {
   override def build(): TermCandidatesCollector = {
     new TermCandidatesCollector(
       nGramSizes,
       minTermFreq,
-      termOccurrencesCollectorConfig.build()
+      termOccurrencesCollectorConfig.build(),
+      termVariantRecognizerConfig.build()
     )
   }
 }
@@ -121,5 +123,6 @@ object TermCandidatesCollectorConfig {
     NamesOnlyTCCConfig.subclasses ++
     POSPatternCheckerConfig.subclasses ++
     StopWordsCheckerConfig.subclasses ++
-    NoiseWordsCheckerConfig.subclasses
+    NoiseWordsCheckerConfig.subclasses ++
+    TermVariantRecognizerConfig.subclasses
 }

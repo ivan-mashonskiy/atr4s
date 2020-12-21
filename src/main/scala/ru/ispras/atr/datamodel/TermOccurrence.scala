@@ -17,4 +17,5 @@ object TermOccurrence {
   val delim = "_"
   def canonicalRepresentation(occ: TermOccurrence): String = canonicalRepresentation(occ.lemmas)
   def canonicalRepresentation(lemmas: Seq[String]): String = lemmas.mkString(delim)
+  def bagOfWordsRepresentation(occ: TermOccurrence): Set[String] = occ.lemmas.toSet
 }

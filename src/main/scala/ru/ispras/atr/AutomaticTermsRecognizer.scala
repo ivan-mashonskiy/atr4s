@@ -118,7 +118,7 @@ object AutomaticTermsRecognizer extends App {
     JsonSer.readFile[ATRConfig](atrConfFile)
   } else {
     log.info(s"Using default ATR config")
-    val defaultConf = new ATRConfig(EmoryNLPPreprocessorConfig(), TCCConfig(), OneFeatureTCWeighterConfig(CValue()))
+    val defaultConf = new ATRConfig(MystemPreprocessorConfig(), TCCConfig(), OneFeatureTCWeighterConfig(CValue()))
     //use this line to write a config into a file
 //    JsonSer.writeFile[ATRConfig](defaultConf, "CValue.conf")
     defaultConf
@@ -131,6 +131,7 @@ object AutomaticTermsRecognizer extends App {
     println(outFilename)
     Files.write(Paths.get(outFilename), terms.mkString("\n").getBytes(StandardCharsets.UTF_8))
   } else {
+    println(terms)
     terms.foreach(println)
   }
 }

@@ -11,7 +11,7 @@ import ru.ispras.atr.utils.Cacher
   * @param cacher helper that works with cache
   */
 class CachingTermCandidatesCollector(cacher: Cacher[TermCandidatesCollectorConfig, Seq[TermCandidate], DSDataset])
-  extends TermCandidatesCollector(null, 0, null) {
+  extends TermCandidatesCollector(null, 0, null, null) {
 
   override def collect(dataset: DSDataset): Seq[TermCandidate] = {
     val result = cacher.getFromCache(dataset)
@@ -62,7 +62,7 @@ object CachingTCCConfig {
   * Decorator for caching only names of term candidates -
   * should be used, when all features are already cached and we do not need term candidates occurrences
   */
-class NamesOnlyTermCandidatesCollector extends TermCandidatesCollector(null, 0, null) {
+class NamesOnlyTermCandidatesCollector extends TermCandidatesCollector(null, 0, null, null) {
   override def collect(dataset: DSDataset): Seq[TermCandidate] = null
 }
 

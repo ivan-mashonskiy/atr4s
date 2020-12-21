@@ -128,7 +128,7 @@ compileScala {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.7'
+    compile 'org.scala-lang:scala-library:2.12.12'
 
     // Emory nlp preprocessing
     compile group: 'edu.emory.mathcs.nlp', name: 'nlp4j-api', version: '1.1.3'
@@ -153,6 +153,9 @@ dependencies {
     compile 'org.spire-math:spire_2.11:0.11.0'
     //stemmer for word2vec (phrases)
     compile "com.github.rholder:snowball-stemmer:1.3.0.581.1"
+
+    compile group: 'ru.stachek66.nlp', name: 'mystem-scala', version: '0.1.6'
+    compile group: 'com.typesafe.play', name: 'play-json_2.11', version: '2.6.10'
 
     //for unit test
     compile 'org.scalatest:scalatest_2.11:2.2.6'

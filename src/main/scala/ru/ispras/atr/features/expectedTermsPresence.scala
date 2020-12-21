@@ -1,7 +1,7 @@
 package ru.ispras.atr.features
 
 import ru.ispras.atr.datamodel.{DSDataset, TermCandidate}
-import ru.ispras.atr.preprocess.{EmoryNLPPreprocessorConfig, NLPPreprocessorConfig}
+import ru.ispras.atr.preprocess.{MystemPreprocessorConfig, NLPPreprocessorConfig}
 import ru.ispras.atr.utils.ExpectedTermsReader
 
 
@@ -14,7 +14,7 @@ import ru.ispras.atr.utils.ExpectedTermsReader
   * @param nlpConfig lemmatizes expected terms read from the file
   */
 case class ExpectedTermsPresence(fileName: String,
-                                 nlpConfig: NLPPreprocessorConfig = EmoryNLPPreprocessorConfig()) extends FeatureConfig {
+                                 nlpConfig: NLPPreprocessorConfig = MystemPreprocessorConfig()) extends FeatureConfig {
   override def build(candidates: Seq[TermCandidate], dataset: DSDataset): FeatureComputer = {
     val termSet = ExpectedTermsReader(fileName, nlpConfig.build())
     new ExpectedTermsPresenceFC(termSet)

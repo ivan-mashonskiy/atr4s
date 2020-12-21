@@ -49,5 +49,5 @@ object RegexPOSPatternCheckerConfig {
 }
 
 object POSPatternCheckerConfig {
-  val subclasses = List(classOf[RegexPOSPatternCheckerConfig])
+  val subclasses = List(classOf[RegexPOSPatternCheckerConfig], classOf[MystemPOSPatternCheckerConfig])
 }
